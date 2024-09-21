@@ -6,8 +6,17 @@
   "outputDirectory": ".next",
   "functions": {
     "app/api/generate/route.ts": {
-      "maxDuration": 60,
-      "runtime": "edge"
+      "maxDuration": 60
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/api/generate",
+      "dest": "/api/generate",
+      "methods": ["POST"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
+  ]
 }
