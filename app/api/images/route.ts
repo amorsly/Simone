@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { kv } from '@vercel/kv';
 
 interface Image {
   id: string;
@@ -9,15 +10,13 @@ interface Image {
   status: 'starting' | 'processing' | 'succeeded' | 'failed';
 }
 
-// In-memory storage (will reset on each deployment)
-let images: Image[] = [];
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = Number(searchParams.get('page')) || 1;
   const limit = Number(searchParams.get('limit')) || 20;
 
   try {
+    const images = await kv.lrange<Image>('images', 0, -1);
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedImages = images.slice(startIndex, endIndex);
@@ -29,11 +28,10 @@ export async function GET(request: Request) {
   }
 }
 
-// Add a POST method to save new images
 export async function POST(request: Request) {
   try {
     const newImage: Image = await request.json();
-    images.unshift(newImage); // Add to the beginning of the array
+    await kv.lpush('images', JSON.stringify(newImage));
     return NextResponse.json(newImage, { status: 201 });
   } catch (error) {
     console.error('Failed to save image:', error);

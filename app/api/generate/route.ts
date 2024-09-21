@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Replicate from "replicate";
+import { kv } from '@vercel/kv';
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -44,11 +45,7 @@ export async function POST(request: Request) {
     };
 
     // Save the new image
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newImage)
-    });
+    await kv.lpush('images', JSON.stringify(newImage));
 
     return NextResponse.json(newImage);
   } catch (error: unknown) {
