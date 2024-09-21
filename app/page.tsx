@@ -17,6 +17,7 @@ interface GeneratedImage {
   url: string;
   prompt: string;
   createdAt: string;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   sessionId: string;
   status: 'starting' | 'processing' | 'succeeded' | 'failed';
 }
@@ -26,7 +27,7 @@ export default function Home() {
   const [images, setImages] = useState<GeneratedImage[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GeneratedImage | null>(null);
-  const [sessionId, setSessionId] = useState<string>("");
+  const [sessionId, _setSessionId] = useState<string>("");
 
   useEffect(() => {
     async function fetchImages() {

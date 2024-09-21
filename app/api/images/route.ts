@@ -12,8 +12,9 @@ interface Image {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const page = Number(searchParams.get('page')) || 1;
-  const limit = Number(searchParams.get('limit')) || 20;
+  const _page = Number(searchParams.get('page')) || 1;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _limit = Number(searchParams.get('limit')) || 20;
 
   try {
     // In a real application, you'd fetch images from your database
