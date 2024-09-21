@@ -19,18 +19,18 @@ export async function POST(request: Request) {
 
     console.log('Calling Replicate API...');
     const output = await replicate.run(
-      "amorsly/simone:95d62527bec54e40a82eba247d0ec753146ba4e62ba0a73db4c3f2f15b04e73a",
+      "amorsly/simone:095d58d6d7eda43b90a61ece519f01906bc451d6ed2cbae5b399c5bda368249e",
       {
         input: {
           prompt: prompt,
-          negative_prompt: "",
-          width: 512,
-          height: 512,
-          num_outputs: 1,
-          num_inference_steps: 50,
-          guidance_scale: 7.5,
-          scheduler: "DPMSolverMultistep",
-          seed: null
+          //negative_prompt: "",
+          //width: 512,
+          //height: 512,
+          //num_outputs: 1,
+          //num_inference_steps: 50,
+          //guidance_scale: 7.5,
+          //scheduler: "DPMSolverMultistep",
+          //seed: null
         }
       }
     );
@@ -54,6 +54,8 @@ export async function POST(request: Request) {
       status: 'succeeded'
     });
   } catch (error: unknown) {
+    console.error('Full error object:', error);
+    console.error('Error generating image:', error instanceof Error ? error.message : String(error));
     console.error('Error in /api/generate:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: 'Internal Server Error', details: errorMessage }, { status: 500 });
