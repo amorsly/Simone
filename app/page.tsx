@@ -33,10 +33,14 @@ export default function Home() {
     async function fetchImages() {
       try {
         const response = await fetch('/api/images');
+        if (!response.ok) {
+          throw new Error('Failed to fetch images');
+        }
         const fetchedImages: GeneratedImage[] = await response.json();
         setImages(fetchedImages);
       } catch (error) {
         console.error("Failed to fetch images:", error);
+        // Optionally set an error state here
       }
     }
     fetchImages();

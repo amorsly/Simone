@@ -5,6 +5,15 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
 
+interface Image {
+  id: string;
+  url: string;
+  prompt: string;
+  createdAt: string;
+  sessionId: string;
+  status: 'starting' | 'processing' | 'succeeded' | 'failed';
+}
+
 export async function POST(request: Request) {
   try {
     const { prompt, sessionId } = await request.json();
@@ -25,14 +34,23 @@ export async function POST(request: Request) {
       throw new Error('No image URL returned from Replicate');
     }
 
-    return NextResponse.json({
+    const newImage: Image = {
       id: Date.now().toString(),
       url: imageUrl,
       prompt: prompt,
       createdAt: new Date().toISOString(),
       sessionId: sessionId,
       status: 'succeeded'
+    };
+
+    // Save the new image
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newImage)
     });
+
+    return NextResponse.json(newImage);
   } catch (error: unknown) {
     console.error('Error in /api/generate:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
