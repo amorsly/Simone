@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "cp -r public .next/standalone/public",
     "start": "next start",
     "lint": "next lint"
   },
