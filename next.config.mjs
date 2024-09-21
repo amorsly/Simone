@@ -9,9 +9,9 @@ const nextConfig = {
     ],
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Ensures ESLint errors don't block deployment
   },
-  // Remove the output and distDir configurations
+  // No custom output or distDir configurations needed for Vercel
 }
 
-export default nextConfig;
+export default nextConfig
