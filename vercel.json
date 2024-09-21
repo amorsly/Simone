@@ -5,7 +5,7 @@
   "framework": "nextjs",
   "outputDirectory": ".next",
   "functions": {
-    "api/generate/*.ts": {
+    "app/api/generate/route.ts": {
       "maxDuration": 60
     }
   }
