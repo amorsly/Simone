@@ -42,22 +42,30 @@ export default function Home() {
     fetchImages();
   }, []);
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt) return;
   
     setIsGenerating(true);
+    setError(null); // Clear any previous errors
+  
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, sessionId })
       });
+      if (!response.ok) {
+        throw new Error('Failed to generate image');
+      }
       const newImage: GeneratedImage = await response.json();
       setImages((prevImages) => [newImage, ...prevImages]);
       setPrompt("");
     } catch (error) {
       console.error("Failed to generate image:", error);
+      setError("Failed to generate image. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -98,6 +106,7 @@ export default function Home() {
           {isGenerating ? "Generating..." : "Generate"}
         </Button>
       </form>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((image) => (
